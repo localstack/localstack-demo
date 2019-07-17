@@ -4,14 +4,15 @@
   "description": "LocalStack demo application",
   "dependencies": {
     "aws-sdk": "^2.402.0",
-    "axios": "^0.18.0",
-    "uuid": "^3.3.2"
+    "axios": "^0.18.1",
+    "uuid": "^3.3.2",
+    "lodash": "^4.17.13"
   },
   "devDependencies": {
     "eslint": "^5.5.0",
     "serverless": "^1.43.0",
     "serverless-deployment-bucket": "^1.0.1",
-    "serverless-localstack": "^0.4.15"
+    "serverless-localstack": "^0.4.16"
   },
   "scripts": {
     "start": "make start",

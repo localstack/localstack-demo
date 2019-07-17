@@ -7,6 +7,7 @@ usage:           ## Show this help
 install:         ## Install dependencies
 	npm install
 	which serverless || npm install -g serverless
+	which localstack || pip install localstack
 
 start:           ## Deploy and start the app locally
 	@make install; \
