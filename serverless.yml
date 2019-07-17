@@ -8,6 +8,8 @@ provider:
   name: aws
   stage: ${opt:stage, 'local'}
   region: ${self:custom.region}
+  deploymentBucket:
+    name: localstack-test-bucket
 
 custom:
   region: us-east-1
