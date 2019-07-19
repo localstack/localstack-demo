@@ -12,7 +12,7 @@
     "eslint": "^5.5.0",
     "serverless": "^1.43.0",
     "serverless-deployment-bucket": "^1.0.1",
-    "serverless-localstack": "^0.4.16"
+    "serverless-localstack": "^0.4.17"
   },
   "scripts": {
     "start": "make start",
