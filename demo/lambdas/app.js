@@ -15,13 +15,17 @@ const connectDynamoDB = () => new AWS.DynamoDB({endpoint: DYNAMODB_ENDPOINT});
 
 const shortUid = () => uuidv4().substring(0, 8);
 
+const headers = {
+  'content-type': 'application/json'
+};
+
 const handleRequest = async (event) => {
     if (event.path === '/requests' && event.httpMethod === 'POST') {
         return startNewRequest(event);
     } else if (event.path === '/requests' && event.httpMethod === 'GET') {
         return listRequests(event);
     } else {
-        return {statusCode: 404, body: {}};
+        return {statusCode: 404, headers, body: {}};
     }
 };
 
@@ -60,6 +64,7 @@ const startNewRequest = async () => {
 
     return {
         statusCode: 200,
+        headers,
         body: {
             requestID: requestID,
             status: status
@@ -83,6 +88,7 @@ const listRequests = async () => {
     });
     return {
         statusCode: 200,
+        headers,
         body: {result: items}
     };
 };

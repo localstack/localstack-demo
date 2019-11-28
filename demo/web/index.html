@@ -16,6 +16,7 @@
     <div id="root"></div>
     <script type="text/babel">
       const refreshInterval = 5000;
+      const bucketName = 'archivebucket';
 
       class App extends React.Component {
         state = {}
@@ -52,7 +53,7 @@
               <div><input type="checkbox" checked={this.state.checked ? 'checked': null} onChange={this.changeAutoUpdate.bind(this)}/> Auto-Refresh</div>
               <div><button onClick={this.sendRequest.bind(this)}>Create new request</button></div>
               <table className="pure-table">
-                <thead><tr><th>Timestamp</th><th>Request ID</th><th>Status</th></tr></thead>
+                <thead><tr><th>Timestamp</th><th>Request ID</th><th>Status</th><th>Action</th></tr></thead>
                 <tbody><RequestEvents baseURL={this.baseURL} autoUpdate={this.state.autoUpdate}/></tbody>
               </table>
             </div>
@@ -84,11 +85,18 @@
 
       class Request extends React.Component {
         render() {
+          const { req } = this.props;
           return (
             <tr>
-              <td>{new Date(this.props.req.timestamp).toLocaleString()}</td>
-              <td>{this.props.req.requestID}</td>
-              <td>{this.props.req.status}</td>
+              <td>{new Date(req.timestamp).toLocaleString()}</td>
+              <td>{req.requestID}</td>
+              <td>{req.status}</td>
+              <td>
+              {req.status === 'FINISHED' &&
+                <a href={`http://localhost:4572/${bucketName}/${req.requestID}/result.txt`} target="_blank">
+                  Download result from S3</a>
+              }
+              </td>
             </tr>
           );
         }
