@@ -1,6 +1,6 @@
 require 'aws-sdk-states'
 
-$endpoint = "http://#{ENV['LOCALSTACK_HOSTNAME']}:4585"
+$endpoint = "http://#{ENV['LOCALSTACK_HOSTNAME']}:4566"
 $state_machine_arn = 'arn:aws:states:us-east-1:000000000000:stateMachine:processingStateMachine'
 
 def triggerProcessing(event:, context:)

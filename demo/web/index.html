@@ -22,16 +22,16 @@
         state = {}
         getBaseURL() {
           if(this.baseURL) return;
-          axios.get('http://localhost:4567/restapis').then((res) => {
+          axios.get('http://localhost:4566/restapis',{headers:{Authorization: 'AWS4-HMAC-SHA256 Credential=testkey/date/region/apigateway/aws4_request'}}).then((res) => {
             const apiID = res.data.item[0].id;
-            this.baseURL = 'http://localhost:4567/restapis/' + apiID + '/v1/_user_request_';
+            this.baseURL = 'http://localhost:4566/restapis/' + apiID + '/local/_user_request_';
             this.setState(prevState=>({...prevState}));
           });
-        }
+        } 
         sendRequest() {
           if(!this.baseURL) return;
           const url = this.baseURL + '/requests';
-          axios.post(url, '{}').then((res) => {
+          axios.post(url, '{}', {headers:{Authorization: 'AWS4-HMAC-SHA256 Credential=testkey/date/region/apigateway/aws4_request'}}).then((res) => {
             alert('New request has been sent to the API. It should appear in the list as QUEUED shortly.');
           });
         }
@@ -93,7 +93,7 @@
               <td>{req.status}</td>
               <td>
               {req.status === 'FINISHED' &&
-                <a href={`http://localhost:4572/${bucketName}/${req.requestID}/result.txt`} target="_blank">
+                <a href={`http://localhost:4566/${bucketName}/${req.requestID}/result.txt`} target="_blank">
                   Download result from S3</a>
               }
               </td>
