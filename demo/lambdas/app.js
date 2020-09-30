@@ -1,11 +1,14 @@
+process.env.AWS_SECRET_ACCESS_KEY = 'test'
+process.env.AWS_ACCESS_KEY_ID = 'test'
+
 const uuidv4 = require('uuid/v4');
 const AWS = require('aws-sdk');
 
 const DOCKER_BRIDGE = process.env.LOCALSTACK_HOSTNAME;
-const SQS_ENDPOINT = `http://${DOCKER_BRIDGE}:4576`;
-const DYNAMODB_ENDPOINT = `http://${DOCKER_BRIDGE}:4569`;
+const SQS_ENDPOINT = `http://${DOCKER_BRIDGE}:4566`;
+const DYNAMODB_ENDPOINT = `http://${DOCKER_BRIDGE}:4566`;
 
-const QUEUE_URL = `http://${DOCKER_BRIDGE}:4576/queue/requestQueue`;
+const QUEUE_URL = `http://${DOCKER_BRIDGE}:4566/queue/requestQueue`;
 const DYNAMODB_TABLE = 'appRequests';
 
 

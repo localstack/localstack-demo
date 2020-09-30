@@ -4,11 +4,11 @@ import uuid
 import datetime
 import boto3
 
-DYNAMODB_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4569'
-S3_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4572'
+DYNAMODB_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4566'
+S3_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4566'
 
 DYNAMODB_TABLE = 'appRequests'
-S3_BUCKET = 'archiveBucket'
+S3_BUCKET = 'archivebucket'
 
 
 def handleRequest(event, context=None):

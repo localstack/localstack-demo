@@ -6,8 +6,8 @@ plugins:
 
 provider:
   name: aws
-  stage: ${opt:stage, 'local'}
-  region: ${self:custom.region}
+  stage: local
+  region: us-east-1
   deploymentBucket:
     name: localstack-test-bucket
 
@@ -25,7 +25,7 @@ custom:
 functions:
   http_handleRequest:
     handler: demo/lambdas/app.handleRequest
-    runtime: nodejs8.10
+    runtime: nodejs10.x
     events:
       - http:
           path: /requests
