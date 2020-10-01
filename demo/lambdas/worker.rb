@@ -1,5 +1,6 @@
 require 'aws-sdk-states'
-
+ENV['AWS_SECRET_ACCESS_KEY'] = 'test'
+ENV['AWS_ACCESS_KEY_ID'] = 'test'
 $endpoint = "http://#{ENV['LOCALSTACK_HOSTNAME']}:4566"
 $state_machine_arn = 'arn:aws:states:us-east-1:000000000000:stateMachine:processingStateMachine'
 
