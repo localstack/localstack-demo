@@ -1,18 +1,23 @@
 sudo: required
 
-language: python
+# language: python
+language: node_js
 
 services:
   - docker
 
-python:
-  - "3.6"
+# python:
+#  - "3.6"
+
+node_js:
+  - 12
 
 branches:
   only:
     - master
 
 install:
+  - pyenv global 3.7.1
   - make install
 
 script:
