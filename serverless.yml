@@ -11,16 +11,22 @@ provider:
   deploymentBucket:
     name: localstack-test-bucket
 
+package:
+  excludeDevDependencies: true
+  exclude:
+    - ./**
+    - "!demo/**"
+    - "!node_modules/uuid/**"
+
 custom:
   region: us-east-1
   accountID: '000000000000'
   localstack:
     stages: [local]
-    host: http://localhost
     debug: true
     autostart: true
-    lambda:
-      mountCode: true
+    # lambda:
+    #   mountCode: true
 
 functions:
   http_handleRequest:
