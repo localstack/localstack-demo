@@ -72,7 +72,7 @@ resources:
     archiveBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: archiveBucket
+        BucketName: archivebucket
     requestQueue:
       Type: AWS::SQS::Queue
       Properties:
