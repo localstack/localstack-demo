@@ -2,7 +2,7 @@ export DOCKER_BRIDGE ?= $(shell (uname -a | grep Linux > /dev/null) && echo 172.
 export SERVICES = serverless,cloudformation,sts,stepfunctions,sqs
 export AWS_ACCESS_KEY_ID ?= test
 export AWS_SECRET_ACCESS_KEY ?= test
-export AWS_DEFAULT_REGION ?= us-east-1
+export AWS_DEFAULT_REGION = us-east-1
 export START_WEB ?= 1
 
 usage:           ## Show this help
@@ -17,6 +17,14 @@ start:           ## Deploy and start the app locally
 	@make install; \
 		echo "Deploying Serverless app to local environment"; \
 		SLS_DEBUG=1 serverless deploy --stage local
+
+send-request:    ## Send a test request to the deployed application
+	@echo Looking up API ID from deployed API Gateway REST APIs ...; \
+		apiId=$$(awslocal apigateway get-rest-apis | jq -r '.items[] | select(.name="local-localstack-demo") | .id'); \
+		echo Sending request to API Gateway REST APIs ID "$$apiId" ...; \
+		requestID=$$(curl -s -d '{}' http://$$apiId.execute-api.localhost.localstack.cloud:4566/local/requests | jq -r .requestID); \
+		echo "Received request ID '$$requestID'"; \
+		for i in 1 2 3 4 5 6 7 8 9 10; do echo "Polling for processing result to appear in s3://archive-bucket/..."; awslocal s3 ls s3://archive-bucket/ | grep $$requestID && exit; sleep 3; done
 
 lint:            ## Run code linter
 	@npm run lint

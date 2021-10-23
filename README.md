@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/whummer/localstack-demo.svg?branch=master)](https://travis-ci.org/whummer/localstack-demo)
+[![Build Status](https://travis-ci.org/localstack/localstack-demo.svg?branch=master)](https://travis-ci.org/whummer/localstack-demo)
 
 # LocalStack Demo
 

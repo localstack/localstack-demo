@@ -8,6 +8,8 @@ provider:
   name: aws
   stage: local
   region: us-east-1
+  stackName: demo1
+  timeout: 15
   deploymentBucket:
     name: localstack-test-bucket
 
@@ -24,7 +26,8 @@ custom:
   localstack:
     stages: [local]
     debug: true
-    autostart: true
+    # Note: enable this configuration to automatically start up a LocalStack container in the background
+#    autostart: true
     # lambda:
     #   mountCode: true
 
@@ -72,7 +75,7 @@ resources:
     archiveBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: archivebucket
+        BucketName: archive-bucket
     requestQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -81,7 +84,7 @@ resources:
       Type: AWS::StepFunctions::StateMachine
       Properties:
         StateMachineName: processingStateMachine
-        RoleArn: testrole
+        RoleArn: arn:aws:iam::000000000000:role/test
         DefinitionString: |
           {
             "StartAt": "ProcessRequest",

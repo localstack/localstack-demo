@@ -8,7 +8,7 @@ DYNAMODB_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4566'
 S3_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4566'
 
 DYNAMODB_TABLE = 'appRequests'
-S3_BUCKET = 'archivebucket'
+S3_BUCKET = 'archive-bucket'
 
 
 def handleRequest(event, context=None):
