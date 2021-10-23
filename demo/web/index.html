@@ -27,7 +27,7 @@
             this.baseURL = 'http://localhost:4566/restapis/' + apiID + '/local/_user_request_';
             this.setState(prevState=>({...prevState}));
           });
-        } 
+        }
         sendRequest() {
           if(!this.baseURL) return;
           const url = this.baseURL + '/requests';

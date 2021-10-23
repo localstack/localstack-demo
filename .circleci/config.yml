@@ -1,0 +1,24 @@
+version: '2.1'
+
+orbs:
+  localstack: localstack/platform@1.0.1
+
+jobs:
+  localstack-test:
+    executor: localstack/default
+    environment:
+      SYNC_POD_NAME=podCI
+    steps:
+      - checkout
+      - localstack/startup
+      - run:
+          command: |
+            awslocal s3 mb s3://test
+            awslocal s3 ls
+            make install
+            make start
+
+workflows:
+  localstack-test:
+    jobs:
+      - localstack-test

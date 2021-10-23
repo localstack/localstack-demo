@@ -8,6 +8,7 @@ provider:
   name: aws
   stage: local
   region: us-east-1
+  stackName: demo1
   deploymentBucket:
     name: localstack-test-bucket
 
@@ -72,7 +73,7 @@ resources:
     archiveBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: archivebucket
+        BucketName: archive-bucket
     requestQueue:
       Type: AWS::SQS::Queue
       Properties:
