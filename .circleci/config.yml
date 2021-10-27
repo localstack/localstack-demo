@@ -8,6 +8,7 @@ jobs:
     executor: localstack/default
     environment:
       SYNC_POD_NAME: podCI
+      CI_PROJECT: ci123
       DATA_DIR: /tmp/ls-data
     steps:
       - checkout
