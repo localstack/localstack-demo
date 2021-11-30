@@ -7,11 +7,12 @@ jobs:
   localstack-test:
     executor: localstack/default
     environment:
-      SYNC_POD_NAME: podCI
       CI_PROJECT: ci123
       DATA_DIR: /tmp/ls-data
+      DNS_ADDRESS: "0"
     steps:
       - checkout
+      - run: docker pull localstack/localstack
       - localstack/startup
       - run:
           name: Deploy app and run test request
