@@ -17,7 +17,7 @@ jobs:
       - run:
           name: Deploy app and run test request
           command: |
-            awslocal s3 mb s3://test
+            awslocal s3 mb s3://test123
             awslocal s3 ls
             make install
             make start
