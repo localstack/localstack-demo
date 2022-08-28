@@ -16,7 +16,9 @@ install:         ## Install dependencies
 start:           ## Deploy and start the app locally
 	@make install; \
 		echo "Deploying Serverless app to local environment"; \
-		SLS_DEBUG=1 serverless deploy --stage local
+		SLS_DEBUG=1 serverless deploy --stage local; \
+		echo "Starting Web app - open this page in your browser: http://localhost:3000"; \
+		npm run web
 
 send-request:    ## Send a test request to the deployed application
 	@echo Looking up API ID from deployed API Gateway REST APIs ...; \

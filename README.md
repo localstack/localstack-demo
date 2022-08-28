@@ -11,6 +11,8 @@ Simple demo application deployed using LocalStack, developed using the Serverles
 * Node.js / `npm`
 * `make`
 
+**Note:** Make sure to start LocalStack with the `EXTRA_CORS_ALLOWED_ORIGINS=http://localhost:3000` config enabled, to ensure the demo Web application can access the local APIs from the browser.
+
 ## Installing
 
 Install the dependencies using this command:
@@ -27,7 +29,7 @@ make start
 
 ## Testing
 
-Open the following file in your browser: `demo/web/index.html`
+After starting the app, open this URL in your browser: http://localhost:3000
 
 * Enable the option "Auto-Refresh" to continuously poll for new results
 * Click the button "Create new request" to send a new request to the backend API
