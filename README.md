@@ -35,7 +35,7 @@ Open the following file in your browser: `demo/web/index.html`
 
 If you have the [`awslocal`](https://github.com/localstack/awscli-local) command line installed, you can browse the contents of the local S3 bucket via:
 ```
-awslocal s3 ls s3://archivebucket/
+awslocal s3 ls s3://archive-bucket/
 ```
 
 ## License

@@ -7,8 +7,7 @@ jobs:
   localstack-test:
     executor: localstack/default
     environment:
-      CI_PROJECT: ci123
-      DATA_DIR: /tmp/ls-data
+      CI_PROJECT: ci-demo-1
       DNS_ADDRESS: "0"
     steps:
       - checkout
@@ -17,6 +16,7 @@ jobs:
       - run:
           name: Deploy app and run test request
           command: |
+            docker logs localstack_main
             awslocal s3 mb s3://test123
             awslocal s3 ls
             make install
