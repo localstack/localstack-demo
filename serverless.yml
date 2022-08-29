@@ -34,27 +34,29 @@ custom:
 functions:
   http_handleRequest:
     handler: demo/lambdas/app.handleRequest
-    runtime: nodejs10.x
+    runtime: nodejs14.x
     events:
       - http:
           path: /requests
           method: post
+          cors: true
       - http:
           path: /requests
           method: get
+          cors: true
   sqs_handleItem:
     handler: demo/lambdas/worker.triggerProcessing
-    runtime: ruby2.5
+    runtime: ruby2.7
     events:
       - sqs:
           arn:
             Fn::GetAtt: [requestQueue, Arn]
   backend_processRequest:
     handler: demo/lambdas/processing.handleRequest
-    runtime: python3.6
+    runtime: python3.7
   backend_archiveResult:
     handler: demo/lambdas/processing.archiveResult
-    runtime: python3.6
+    runtime: python3.7
 
 resources:
   Resources:

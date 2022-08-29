@@ -16,22 +16,25 @@
     <div id="root"></div>
     <script type="text/babel">
       const refreshInterval = 5000;
-      const bucketName = 'archivebucket';
+      const bucketName = 'archive-bucket';
+      const region = 'us-east-1';
+      const apiEndpoint = 'https://localhost.localstack.cloud:4566';
+      const headers = {Authorization: `AWS4-HMAC-SHA256 Credential=testkey/date/${region}/apigateway/aws4_request`};
 
       class App extends React.Component {
         state = {}
         getBaseURL() {
           if(this.baseURL) return;
-          axios.get('http://localhost:4566/restapis',{headers:{Authorization: 'AWS4-HMAC-SHA256 Credential=testkey/date/region/apigateway/aws4_request'}}).then((res) => {
+          axios.get(`${apiEndpoint}/restapis`, {headers}).then((res) => {
             const apiID = res.data.item[0].id;
-            this.baseURL = 'http://localhost:4566/restapis/' + apiID + '/local/_user_request_';
+            this.baseURL = `${apiEndpoint}/restapis/${apiID}/local/_user_request_`;
             this.setState(prevState=>({...prevState}));
           });
         }
         sendRequest() {
           if(!this.baseURL) return;
           const url = this.baseURL + '/requests';
-          axios.post(url, '{}', {headers:{Authorization: 'AWS4-HMAC-SHA256 Credential=testkey/date/region/apigateway/aws4_request'}}).then((res) => {
+          axios.post(url, '{}', {headers}).then((res) => {
             alert('New request has been sent to the API. It should appear in the list as QUEUED shortly.');
           });
         }
