@@ -106,5 +106,35 @@
       }
       ReactDOM.render(React.createElement(App), document.getElementById('root'));
     </script>
+    <hr />
+    <div style="display: flex">
+      <div style="width: 50%">
+        <h1>Request Worker Sample App</h1>
+        <p>
+        This sample app illustrates a typical Web application scenario with asynchronous request processing happening in the background, all running locally inside LocalStack.
+        </p><p>
+          The end-to-end process is illustrated in the figure on the right.
+        </p><p>
+          Here's how the app works:
+        </p>
+        <ul>
+          <li>
+            Use the button above to send a new request to local API Gateway, which will then be handled by a Lambda function for further processing. Enable "Auto-Refresh" to poll the status of the request.
+          </li><li>
+            As the request is going through different stages of processing, the table will be updated with the current request status (QUEUED -> PROCESSING -> FINISHED).
+          </li><li>
+            Once the request is FINISHED, the processing result will become available as a link to a file stored in S3.
+          </li>
+        </ul>
+        <p>
+          (Note that all resources will be deployed to the local "us-east-1" region.)
+        </p><p>
+          The full source code of this sample is available in this Github repo: <a href="https://github.com/localstack/localstack-demo">https://github.com/localstack/localstack-demo</a>
+        </p>
+      </div>
+      <div style="width: 50%">
+        <img src="architecture.png" style="width: 600px"/>
+      </div>
+    </div>
   </body>
 </html>
