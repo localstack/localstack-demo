@@ -20,7 +20,8 @@ jobs:
             awslocal s3 mb s3://test123
             awslocal s3 ls
             make install
-            make start
+            make deploy
+            make web &
             make send-request
             code=$?
             docker logs localstack_main
