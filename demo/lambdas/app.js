@@ -19,7 +19,10 @@ const connectDynamoDB = () => new AWS.DynamoDB({endpoint: DYNAMODB_ENDPOINT});
 const shortUid = () => uuidv4().substring(0, 8);
 
 const headers = {
-  'content-type': 'application/json'
+  'content-type': 'application/json',
+  'Access-Control-Allow-Headers' : 'Content-Type',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
 };
 
 const handleRequest = async (event) => {
