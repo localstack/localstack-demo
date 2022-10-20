@@ -7,7 +7,6 @@ plugins:
 provider:
   name: aws
   stage: ${opt:stage,'local'}
-  profile: ls-sandbox
   region: us-east-1
   stackName: demo1
   timeout: 15
