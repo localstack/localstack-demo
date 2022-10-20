@@ -76,7 +76,8 @@ functions:
       STATE_MACHINE_ARN: !Sub '${processingStateMachine.Arn}'
     events:
       - sqs:
-          arn: !Sub '${requestQueue.Arn}'
+          arn:
+            Fn::GetAtt: [requestQueue, Arn]
   backendProcessRequest:
     handler: demo/lambdas/processing.handle_request
     runtime: python3.7
