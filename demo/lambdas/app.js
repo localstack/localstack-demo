@@ -1,20 +1,19 @@
-process.env.AWS_SECRET_ACCESS_KEY = 'test'
-process.env.AWS_ACCESS_KEY_ID = 'test'
-
 const uuidv4 = require('uuid/v4');
 const AWS = require('aws-sdk');
 
 const LOCALSTACK_HOSTNAME = process.env.LOCALSTACK_HOSTNAME;
-const SQS_ENDPOINT = `http://${LOCALSTACK_HOSTNAME}:4566`;
-const DYNAMODB_ENDPOINT = `http://${LOCALSTACK_HOSTNAME}:4566`;
+const ENDPOINT = `http://${LOCALSTACK_HOSTNAME}:4566`;
+if (LOCALSTACK_HOSTNAME) {
+    process.env.AWS_SECRET_ACCESS_KEY = 'test'
+    process.env.AWS_ACCESS_KEY_ID = 'test'
+}
 
-const QUEUE_URL = `http://${LOCALSTACK_HOSTNAME}:4566/queue/requestQueue`;
 const DYNAMODB_TABLE = 'appRequests';
+const QUEUE_NAME = 'requestQueue';
+const CLIENT_CONFIG = LOCALSTACK_HOSTNAME ? {endpoint: ENDPOINT} : {};
 
-
-const connectSQS = () => new AWS.SQS({endpoint: SQS_ENDPOINT});
-
-const connectDynamoDB = () => new AWS.DynamoDB({endpoint: DYNAMODB_ENDPOINT});
+const connectSQS = () => new AWS.SQS(CLIENT_CONFIG);
+const connectDynamoDB = () => new AWS.DynamoDB(CLIENT_CONFIG);
 
 const shortUid = () => uuidv4().substring(0, 8);
 
@@ -40,9 +39,10 @@ const startNewRequest = async () => {
     const sqs = connectSQS();
     const requestID = shortUid();
     const message = {'requestID': requestID};
+    const queueUrl = (await sqs.getQueueUrl({QueueName: QUEUE_NAME}).promise()).QueueUrl;
     let params = {
         MessageBody: JSON.stringify(message),
-        QueueUrl: QUEUE_URL
+        QueueUrl: queueUrl
     };
     await sqs.sendMessage(params).promise();
 
@@ -68,13 +68,14 @@ const startNewRequest = async () => {
     };
     await dynamodb.putItem(params).promise();
 
+    const body = JSON.stringify({
+        requestID,
+        status
+    });
     return {
         statusCode: 200,
         headers,
-        body: {
-            requestID: requestID,
-            status: status
-        }
+        body
     };
 };
 
@@ -83,8 +84,8 @@ const listRequests = async () => {
     const params = {
         TableName: DYNAMODB_TABLE,
     };
-    const result = await dynamodb.scan(params).promise();
-    const items = result['Items'].map((x) => {
+    const scanResult = await dynamodb.scan(params).promise();
+    const items = scanResult['Items'].map((x) => {
         Object.keys(x).forEach((attr) => {
             if ('N' in x[attr]) x[attr] = parseFloat(x[attr].N);
             else if ('S' in x[attr]) x[attr] = x[attr].S;
@@ -92,11 +93,12 @@ const listRequests = async () => {
         });
         return x;
     });
-    return {
+    const result = {
         statusCode: 200,
         headers,
-        body: {result: items}
+        body: JSON.stringify({result: items})
     };
+    return result;
 };
 
 module.exports = {

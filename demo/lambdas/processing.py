@@ -4,20 +4,20 @@ import uuid
 import datetime
 import boto3
 
-DYNAMODB_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4566'
-S3_ENDPOINT = f'http://{os.environ["LOCALSTACK_HOSTNAME"]}:4566'
+LOCALSTACK_HOSTNAME = os.environ.get("LOCALSTACK_HOSTNAME")
+ENDPOINT = f'http://{LOCALSTACK_HOSTNAME}:4566'
 
 DYNAMODB_TABLE = 'appRequests'
-S3_BUCKET = 'archive-bucket'
+S3_BUCKET = os.environ.get('ARCHIVE_BUCKET') or 'archive-bucket'
 
 
-def handleRequest(event, context=None):
+def handle_request(event, context=None):
     # simulate queueing delay
     time.sleep(5)
-    print('handleRequest', event)
+    print('handle_request', event)
     # set request status to PROCESSING
     status = 'PROCESSING'
-    setStatus(event['requestID'], status)
+    set_status(event['requestID'], status)
     # simulate processing delay
     time.sleep(4)
     return {
@@ -26,11 +26,11 @@ def handleRequest(event, context=None):
     }
 
 
-def archiveResult(event, context=None):
-    print('archiveResult', event)
+def archive_result(event, context=None):
+    print('archive_result', event)
     requestID = event['requestID']
     # put result onto S3
-    s3 = getClient('s3')
+    s3 = get_client('s3')
     s3.put_object(
         Bucket=S3_BUCKET,
         Key=f'{requestID}/result.txt',
@@ -39,20 +39,16 @@ def archiveResult(event, context=None):
     # simulate processing delay
     time.sleep(3)
     # set request status to FINISHED
-    setStatus(requestID, 'FINISHED')
+    set_status(requestID, 'FINISHED')
 
 
-def getClient(resource):
-    endpoints = {
-        'dynamodb': DYNAMODB_ENDPOINT,
-        's3': S3_ENDPOINT
-    }
-    endpoint = endpoints.get(resource)
-    return boto3.client(resource, endpoint_url=endpoint)
+def get_client(resource):
+    kwargs = {"endpoint_url": ENDPOINT} if LOCALSTACK_HOSTNAME else {}
+    return boto3.client(resource, **kwargs)
 
 
-def setStatus(requestID, status):
-    dynamodb = getClient('dynamodb')
+def set_status(requestID, status):
+    dynamodb = get_client('dynamodb')
     item = {
         'id': {'S': short_uid()},
         'requestID': {'S': requestID},
