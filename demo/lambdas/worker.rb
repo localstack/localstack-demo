@@ -6,6 +6,7 @@ if $localstack_hostname
     ENV['AWS_SECRET_ACCESS_KEY'] = 'test'
     ENV['AWS_ACCESS_KEY_ID'] = 'test'
 end
+$state_machine_arn = ENV['STATE_MACHINE_ARN']
 
 def triggerProcessing(event:, context:)
     if $localstack_hostname
@@ -14,19 +15,10 @@ def triggerProcessing(event:, context:)
         client = Aws::States::Client.new()
     end
 
-    # get state machine ARN - TODO consider adding paging
-    result = client.list_state_machines()
-    sm_arn = ""
-    for sm in result.state_machines do
-        if sm.name == 'processingStateMachine'
-            sm_arn = sm.state_machine_arn
-        end
-    end
-
     records = event['Records']
     for rec in records do
         result = client.start_execution({
-            state_machine_arn: sm_arn,
+            state_machine_arn: $state_machine_arn,
             input: rec['body']
         })
     end

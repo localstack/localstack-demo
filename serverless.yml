@@ -72,10 +72,11 @@ functions:
   sqsHandleItem:
     handler: demo/lambdas/worker.triggerProcessing
     runtime: ruby2.7
+    environment:
+      STATE_MACHINE_ARN: !Sub '${processingStateMachine.Arn}'
     events:
       - sqs:
-          arn:
-            Fn::GetAtt: [requestQueue, Arn]
+          arn: !Sub '${requestQueue.Arn}'
   backendProcessRequest:
     handler: demo/lambdas/processing.handle_request
     runtime: python3.7
