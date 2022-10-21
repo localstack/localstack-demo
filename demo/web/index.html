@@ -24,7 +24,8 @@
       class App extends React.Component {
         state = {}
         getBaseURL() {
-          if(this.baseURL) return;
+          if(this.state.endpoint) return this.state.endpoint;
+          if(this.baseURL) return this.baseURL;
           axios.get(`${apiEndpoint}/restapis`, {headers}).then((res) => {
             const apiID = res.data.item[0].id;
             this.baseURL = `${apiEndpoint}/restapis/${apiID}/local/_user_request_`;
@@ -32,10 +33,12 @@
           });
         }
         sendRequest() {
-          if(!this.baseURL) return;
-          const url = this.baseURL + '/requests';
+          const baseURL = this.getBaseURL();
+          if(!baseURL) return;
+          const url = baseURL + '/requests';
           axios.post(url, '{}', {headers}).then((res) => {
             alert('New request has been sent to the API. It should appear in the list as QUEUED shortly.');
+            this.setState({autoUpdate: true});
           });
         }
         componentDidMount() {
@@ -43,21 +46,25 @@
           this.loopRefresh();
         }
         loopRefresh() {
-          this.setState(prevState=>({...prevState}));
           setInterval(this.loopRefresh.bind(this), refreshInterval);
+          this.setState(prevState=>({...prevState}));
         }
         changeAutoUpdate() {
           this.setState({autoUpdate: !this.state.autoUpdate})
+        }
+        changeEndpoint(event) {
+          this.setState({endpoint: event.target.value})
         }
         render() {
           return (
             <div>
               <h2>Requests:</h2>
               <div><input type="checkbox" checked={this.state.checked ? 'checked': null} onChange={this.changeAutoUpdate.bind(this)}/> Auto-Refresh</div>
+              <div>API Gateway API endpoint: <input type="text" onChange={this.changeEndpoint.bind(this)}/> (leave empty for auto-discovery)</div>
               <div><button onClick={this.sendRequest.bind(this)}>Create new request</button></div>
               <table className="pure-table">
                 <thead><tr><th>Timestamp</th><th>Request ID</th><th>Status</th><th>Action</th></tr></thead>
-                <tbody><RequestEvents baseURL={this.baseURL} autoUpdate={this.state.autoUpdate}/></tbody>
+                <tbody><RequestEvents baseURL={this.getBaseURL()} autoUpdate={this.state.autoUpdate}/></tbody>
               </table>
             </div>
           );

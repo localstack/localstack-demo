@@ -6,12 +6,31 @@ plugins:
 
 provider:
   name: aws
-  stage: local
+  stage: ${opt:stage,'local'}
   region: us-east-1
   stackName: demo1
   timeout: 15
   deploymentBucket:
-    name: localstack-test-bucket
+    name: ${self:custom.deploymentBucket.${self:provider.stage}}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:*
+          Resource: 'arn:aws:dynamodb:us-east-1:*:table/appRequests'
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource: 'arn:aws:sqs:us-east-1:*:requestQueue'
+        - Effect: Allow
+          Action:
+            - states:*
+          Resource: 'arn:aws:states:us-east-1:*:stateMachine:*'
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource: !Sub 'arn:aws:s3:::${self:custom.archiveBucket.${self:provider.stage}}/*'
 
 package:
   excludeDevDependencies: true
@@ -30,9 +49,15 @@ custom:
 #    autostart: true
     # lambda:
     #   mountCode: true
+  deploymentBucket:
+    local: localstack-test-bucket
+    aws: localstack-test-bucket-53194
+  archiveBucket:
+    local: archive-bucket
+    aws: localstack-demo-archive-bucket-53194
 
 functions:
-  http_handleRequest:
+  httpHandleRequest:
     handler: demo/lambdas/app.handleRequest
     runtime: nodejs14.x
     events:
@@ -44,19 +69,23 @@ functions:
           path: /requests
           method: get
           cors: true
-  sqs_handleItem:
+  sqsHandleItem:
     handler: demo/lambdas/worker.triggerProcessing
     runtime: ruby2.7
+    environment:
+      STATE_MACHINE_ARN: !Sub '${processingStateMachine.Arn}'
     events:
       - sqs:
           arn:
             Fn::GetAtt: [requestQueue, Arn]
-  backend_processRequest:
-    handler: demo/lambdas/processing.handleRequest
+  backendProcessRequest:
+    handler: demo/lambdas/processing.handle_request
     runtime: python3.7
-  backend_archiveResult:
-    handler: demo/lambdas/processing.archiveResult
+  backendArchiveResult:
+    handler: demo/lambdas/processing.archive_result
     runtime: python3.7
+    environment:
+      ARCHIVE_BUCKET: ${self:custom.archiveBucket.${self:provider.stage}}
 
 resources:
   Resources:
@@ -64,6 +93,7 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: appRequests
+        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -77,7 +107,7 @@ resources:
     archiveBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: archive-bucket
+        BucketName: ${self:custom.archiveBucket.${self:provider.stage}}
     requestQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -86,20 +116,39 @@ resources:
       Type: AWS::StepFunctions::StateMachine
       Properties:
         StateMachineName: processingStateMachine
-        RoleArn: arn:aws:iam::000000000000:role/test
-        DefinitionString: |
+        RoleArn: !Sub '${processingStateMachineRole.Arn}'
+        DefinitionString: !Sub |
           {
             "StartAt": "ProcessRequest",
             "States": {
               "ProcessRequest": {
                 "Type": "Task",
-                "Resource": "arn:aws:lambda:${self:provider.region}:${self:custom.accountID}:function:${self:service}-${self:provider.stage}-backend_processRequest",
+                "Resource": "${BackendProcessRequestLambdaFunction.Arn}",
                 "Next": "ArchiveResult"
               },
               "ArchiveResult": {
                 "Type": "Task",
-                "Resource": "arn:aws:lambda:${self:provider.region}:${self:custom.accountID}:function:${self:service}-${self:provider.stage}-backend_archiveResult",
+                "Resource": "${BackendArchiveResultLambdaFunction.Arn}",
                 "End": true
               }
             }
           }
+    processingStateMachineRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: !Sub 'states.${AWS::Region}.amazonaws.com'
+              Action: 'sts:AssumeRole'
+        Policies:
+          - PolicyName: lambda
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action: 'lambda:InvokeFunction'
+                  Resource:
+                    - !Sub '${BackendProcessRequestLambdaFunction.Arn}'
+                    - !Sub '${BackendArchiveResultLambdaFunction.Arn}'
