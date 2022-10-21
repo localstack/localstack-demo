@@ -41,19 +41,17 @@
             this.setState({autoUpdate: true});
           });
         }
-        componentDidMount() {
-          this.getBaseURL();
-          this.loopRefresh();
-        }
         loopRefresh() {
-          setInterval(this.loopRefresh.bind(this), refreshInterval);
+          if (!this.state.autoUpdate) return;
           this.setState(prevState=>({...prevState}));
+          setTimeout(this.loopRefresh.bind(this), refreshInterval);
         }
         changeAutoUpdate() {
-          this.setState({autoUpdate: !this.state.autoUpdate})
+          this.setState({autoUpdate: !this.state.autoUpdate});
+          setTimeout(this.loopRefresh.bind(this), 1);
         }
         changeEndpoint(event) {
-          this.setState({endpoint: event.target.value})
+          this.setState({endpoint: event.target.value});
         }
         render() {
           return (

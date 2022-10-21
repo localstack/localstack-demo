@@ -15,6 +15,7 @@
     "serverless": "^3.0.0",
     "serverless-deployment-bucket": "^1.5.1",
     "serverless-localstack": "^1.0.1",
+    "serverless-sync-s3": "^0.3.0",
     "set-value": "^4.0.1"
   },
   "scripts": {

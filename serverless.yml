@@ -3,6 +3,7 @@ service: localstack-demo
 plugins:
   - serverless-deployment-bucket
   - serverless-localstack
+  - serverless-sync-s3
 
 provider:
   name: aws
@@ -55,6 +56,9 @@ custom:
   archiveBucket:
     local: archive-bucket
     aws: localstack-demo-archive-bucket-53194
+  syncS3:
+    - bucketName: ${self:custom.archiveBucket.${self:provider.stage}}
+      localDir: demo/web
 
 functions:
   httpHandleRequest:
