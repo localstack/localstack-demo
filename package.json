@@ -14,7 +14,7 @@
     "serve": "^14.0.0",
     "serverless": "^3.0.0",
     "serverless-deployment-bucket": "^1.5.1",
-    "serverless-localstack": "^0.4.35",
+    "serverless-localstack": "^1.0.1",
     "set-value": "^4.0.1"
   },
   "scripts": {
