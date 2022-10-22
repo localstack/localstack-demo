@@ -18,7 +18,9 @@
       const refreshInterval = 5000;
       const bucketName = 'archive-bucket';
       const region = 'us-east-1';
-      const apiEndpoint = 'https://localhost.localstack.cloud:4566';
+      const urlParams = new URLSearchParams(window.location.search);
+      const defaultEndpoint = 'https://localhost.localstack.cloud:4566';
+      const apiEndpoint = urlParams.get('endpoint') || (window.location.port == 3000 ? defaultEndpoint : window.location.origin);
       const headers = {Authorization: `AWS4-HMAC-SHA256 Credential=testkey/date/${region}/apigateway/aws4_request`};
 
       class App extends React.Component {

@@ -3,6 +3,9 @@ service: localstack-demo
 plugins:
   - serverless-deployment-bucket
   - serverless-localstack
+  # Note: Although there's some more popular S3 sync plugins out there, most of them failed on LocalStack with:
+  #   "Error: Non-file stream objects are not supported with SigV4"
+  #     at Object.computeSha256 (node_modules/aws-sdk/lib/util.js:754:23)
   - serverless-sync-s3
 
 provider:
