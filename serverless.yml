@@ -64,7 +64,7 @@ custom:
       localDir: demo/web
 
 functions:
-  httpHandleRequest:
+  httphandlerequest:
     handler: demo/lambdas/app.handleRequest
     runtime: nodejs14.x
     events:
@@ -76,7 +76,7 @@ functions:
           path: /requests
           method: get
           cors: true
-  sqsHandleItem:
+  sqshandleitem:
     handler: demo/lambdas/worker.triggerProcessing
     runtime: ruby2.7
     environment:
@@ -85,10 +85,10 @@ functions:
       - sqs:
           arn:
             Fn::GetAtt: [requestQueue, Arn]
-  backendProcessRequest:
+  backendprocessrequest:
     handler: demo/lambdas/processing.handle_request
     runtime: python3.7
-  backendArchiveResult:
+  backendarchiveresult:
     handler: demo/lambdas/processing.archive_result
     runtime: python3.7
     environment:
@@ -130,12 +130,12 @@ resources:
             "States": {
               "ProcessRequest": {
                 "Type": "Task",
-                "Resource": "${BackendProcessRequestLambdaFunction.Arn}",
+                "Resource": "${BackendprocessrequestLambdaFunction.Arn}",
                 "Next": "ArchiveResult"
               },
               "ArchiveResult": {
                 "Type": "Task",
-                "Resource": "${BackendArchiveResultLambdaFunction.Arn}",
+                "Resource": "${BackendarchiveresultLambdaFunction.Arn}",
                 "End": true
               }
             }
@@ -157,5 +157,5 @@ resources:
                 - Effect: Allow
                   Action: 'lambda:InvokeFunction'
                   Resource:
-                    - !Sub '${BackendProcessRequestLambdaFunction.Arn}'
-                    - !Sub '${BackendArchiveResultLambdaFunction.Arn}'
+                    - !Sub '${BackendprocessrequestLambdaFunction.Arn}'
+                    - !Sub '${BackendarchiveresultLambdaFunction.Arn}'
