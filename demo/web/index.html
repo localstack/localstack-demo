@@ -3,16 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <script 
-src="https://unpkg.com/react/umd/react.development.js"></script>
-    <script 
-src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
-    <script 
-src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script 
-src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
-    <link rel="stylesheet" 
-href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"></link>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"></link>
     <style type="text/css">
       div {padding: 8px;}
     </style>
@@ -25,10 +20,8 @@ href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"></link>
       const region = 'us-east-1';
       const urlParams = new URLSearchParams(window.location.search);
       const defaultEndpoint = 'https://localhost.localstack.cloud:4566';
-      const apiEndpoint = urlParams.get('endpoint') || 
-(window.location.port == 3000 ? defaultEndpoint : window.location.origin);
-      const headers = {Authorization: `AWS4-HMAC-SHA256 
-Credential=testkey/date/${region}/apigateway/aws4_request`};
+      const apiEndpoint = urlParams.get('endpoint') || (window.location.port == 3000 ? defaultEndpoint : window.location.origin);
+      const headers = {Authorization: `AWS4-HMAC-SHA256 Credential=testkey/date/${region}/apigateway/aws4_request`};
 
       class App extends React.Component {
         state = {}
@@ -38,8 +31,7 @@ Credential=testkey/date/${region}/apigateway/aws4_request`};
           axios.get(`${apiEndpoint}/restapis`, {headers}).then((res) => {
             const apiID = res?.data?.item?.[0]?.id;
             if (apiID) {
-              this.baseURL = 
-`${apiEndpoint}/restapis/${apiID}/local/_user_request_`;
+              this.baseURL = `${apiEndpoint}/restapis/${apiID}/local/_user_request_`;
               this.setState(prevState=>({...prevState}));
             }
           });
@@ -49,8 +41,7 @@ Credential=testkey/date/${region}/apigateway/aws4_request`};
           if(!baseURL) return;
           const url = baseURL + '/requests';
           axios.post(url, '{}', {headers}).then((res) => {
-            alert('New request has been sent to the API. It should appear 
-in the list as QUEUED shortly.');
+            alert('New request has been sent to the API. It should appear in the list as QUEUED shortly.');
             this.setState({autoUpdate: true});
           });
         }
@@ -70,19 +61,12 @@ in the list as QUEUED shortly.');
           return (
             <div>
               <h2>Requests:</h2>
-              <div><input type="checkbox" checked={this.state.checked ? 
-'checked': null} onChange={this.changeAutoUpdate.bind(this)}/> 
-Auto-Refresh</div>
-              <div>API Gateway API endpoint: <input type="text" 
-onChange={this.changeEndpoint.bind(this)}/> (leave empty for 
-auto-discovery)</div>
-              <div><button onClick={this.sendRequest.bind(this)}>Create 
-new request</button></div>
+              <div><input type="checkbox" checked={this.state.checked ? 'checked': null} onChange={this.changeAutoUpdate.bind(this)}/> Auto-Refresh</div>
+              <div>API Gateway API endpoint: <input type="text" onChange={this.changeEndpoint.bind(this)}/> (leave empty for auto-discovery)</div>
+              <div><button onClick={this.sendRequest.bind(this)}>Create new request</button></div>
               <table className="pure-table">
-                <thead><tr><th>Timestamp</th><th>Request 
-ID</th><th>Status</th><th>Action</th></tr></thead>
-                <tbody><RequestEvents baseURL={this.getBaseURL()} 
-autoUpdate={this.state.autoUpdate}/></tbody>
+                <thead><tr><th>Timestamp</th><th>Request ID</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody><RequestEvents baseURL={this.getBaseURL()} autoUpdate={this.state.autoUpdate}/></tbody>
               </table>
             </div>
           );
@@ -91,10 +75,8 @@ autoUpdate={this.state.autoUpdate}/></tbody>
 
       class RequestEvents extends React.Component {
         shouldFetchData() {
-          if(!this.props.baseURL || (this.nextUpdateTime && 
-!this.props.autoUpdate)) return false;
-          if(this.nextUpdateTime && this.nextUpdateTime > Date.now()) 
-return false;
+          if(!this.props.baseURL || (this.nextUpdateTime && !this.props.autoUpdate)) return false;
+          if(this.nextUpdateTime && this.nextUpdateTime > Date.now()) return false;
           this.nextUpdateTime = Date.now() + refreshInterval;
           return true;
         }
@@ -123,9 +105,7 @@ return false;
               <td>{req.status}</td>
               <td>
               {req.status === 'FINISHED' &&
-                <a 
-href={`http://localhost:4566/${bucketName}/${req.requestID}/result.txt`} 
-target="_blank">
+                <a href={`http://localhost:4566/${bucketName}/${req.requestID}/result.txt`} target="_blank">
                   Download result from S3</a>
               }
               </td>
@@ -144,36 +124,25 @@ target="_blank">
       <div style="width: 50%">
         <h1>Request Worker Sample App</h1>
         <p>
-        This sample app illustrates a typical Web application scenario 
-with asynchronous request processing happening in the background, all 
-running locally inside LocalStack.
+        This sample app illustrates a typical Web application scenario with asynchronous request processing happening in the background, all running locally inside LocalStack.
         </p><p>
-          The end-to-end process is illustrated in the figure on the 
-right.
+          The end-to-end process is illustrated in the figure on the right.
         </p><p>
           Here's how the app works:
         </p>
         <ul>
           <li>
-            Use the button above to send a new request to local API 
-Gateway, which will then be handled by a Lambda function for further 
-processing. Enable "Auto-Refresh" to poll the status of the request.
+            Use the button above to send a new request to local API Gateway, which will then be handled by a Lambda function for further processing. Enable "Auto-Refresh" to poll the status of the request.
           </li><li>
-            As the request is going through different stages of 
-processing, the table will be updated with the current request status 
-(QUEUED -> PROCESSING -> FINISHED).
+            As the request is going through different stages of processing, the table will be updated with the current request status (QUEUED -> PROCESSING -> FINISHED).
           </li><li>
-            Once the request is FINISHED, the processing result will 
-become available as a link to a file stored in S3.
+            Once the request is FINISHED, the processing result will become available as a link to a file stored in S3.
           </li>
         </ul>
         <p>
-          (Note that all resources will be deployed to the local 
-"us-east-1" region.)
+          (Note that all resources will be deployed to the local "us-east-1" region.)
         </p><p>
-          The full source code of this sample is available in this Github 
-repo: <a 
-href="https://github.com/localstack/localstack-demo">https://github.com/localstack/localstack-demo</a>
+          The full source code of this sample is available in this Github repo: <a href="https://github.com/localstack/localstack-demo">https://github.com/localstack/localstack-demo</a>
         </p>
       </div>
       <div style="width: 50%">
