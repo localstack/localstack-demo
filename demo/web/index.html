@@ -29,9 +29,11 @@
           if(this.state.endpoint) return this.state.endpoint;
           if(this.baseURL) return this.baseURL;
           axios.get(`${apiEndpoint}/restapis`, {headers}).then((res) => {
-            const apiID = res.data.item[0].id;
-            this.baseURL = `${apiEndpoint}/restapis/${apiID}/local/_user_request_`;
-            this.setState(prevState=>({...prevState}));
+            const apiID = res?.data?.item?.[0]?.id;
+            if (apiID) {
+              this.baseURL = `${apiEndpoint}/restapis/${apiID}/local/_user_request_`;
+              this.setState(prevState=>({...prevState}));
+            }
           });
         }
         sendRequest() {
@@ -111,7 +113,11 @@
           );
         }
       }
-      ReactDOM.render(React.createElement(App), document.getElementById('root'));
+      const container = document.getElementById('root');
+      // Create a root
+      const root = ReactDOM.createRoot(container);
+      // Initial render
+      root.render(React.createElement(App));
     </script>
     <hr />
     <div style="display: flex">
@@ -145,3 +151,4 @@
     </div>
   </body>
 </html>
+
