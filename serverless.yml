@@ -48,6 +48,7 @@ custom:
   accountID: '000000000000'
   localstack:
     stages: [local]
+    host: http://127.0.0.1
     debug: true
     # Note: enable this configuration to automatically start up a LocalStack container in the background
 #    autostart: true
