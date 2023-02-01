@@ -15,7 +15,7 @@ The sample app illustrates a typical Web application scenario with asynchronous 
 * Node.js / `npm`
 * `make`
 
-**Note:** Make sure to start LocalStack with the `EXTRA_CORS_ALLOWED_ORIGINS=http://localhost:3000` config enabled, to ensure the demo Web application can access the local APIs from the browser.
+Note: Please make sure to pull and start the `latest` LocalStack Docker image. At the time of writing (2023-02-01), the demo requires some features that were only recently added to LocalStack and are not part of a tagged release version yet.
 
 ## Installing
 
@@ -26,14 +26,14 @@ make install
 
 ## Running
 
-Start the application locally in LocalStack:
+To deploy and start the application locally in LocalStack:
 ```
-make start
+make deploy
 ```
 
 ## Testing
 
-After starting the app, open this URL in your browser: http://localhost:3000
+After starting the app, open this URL in your browser: http://localhost:4566/archive-bucket/index.html
 
 * Enable the option "Auto-Refresh" to continuously poll for new results
 * Click the button "Create new request" to send a new request to the backend API
