@@ -15,6 +15,8 @@ The sample app illustrates a typical Web application scenario with asynchronous 
 * Node.js / `npm`
 * `make`
 
+Note: Please make sure to pull and start the `latest` LocalStack Docker image. At the time of writing (2023-02-01), the demo requires some features that were only recently added to LocalStack and are not part of a tagged release version yet.
+
 ## Installing
 
 Install the dependencies using this command:
