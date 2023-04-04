@@ -6,8 +6,8 @@ usage:           ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 install:         ## Install dependencies
-	npm install
-	which serverless || npm install -g serverless
+	yarn
+	which serverless || yarn global add serverless
 	which localstack || pip install localstack
 
 deploy:          ## Deploy the app
@@ -24,7 +24,7 @@ send-request:    ## Send a test request to the deployed application
 		for i in 1 2 3 4 5 6 7 8 9 10; do echo "Polling for processing result to appear in s3://archive-bucket/..."; awslocal s3 ls s3://archive-bucket/ | grep $$requestID && exit; sleep 3; done
 
 lint:            ## Run code linter
-	@npm run lint
+	@yarn lint
 	@flake8 demo
 
 .PHONY: usage install deploy send-request lint
