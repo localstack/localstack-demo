@@ -4,8 +4,8 @@ const AWS = require('aws-sdk');
 const LOCALSTACK_HOSTNAME = process.env.LOCALSTACK_HOSTNAME;
 const ENDPOINT = `http://${LOCALSTACK_HOSTNAME}:4566`;
 if (LOCALSTACK_HOSTNAME) {
-    process.env.AWS_SECRET_ACCESS_KEY = 'test'
-    process.env.AWS_ACCESS_KEY_ID = 'test'
+    process.env.AWS_SECRET_ACCESS_KEY = 'test';
+    process.env.AWS_ACCESS_KEY_ID = 'test';
 }
 
 const DYNAMODB_TABLE = 'appRequests';
@@ -18,10 +18,10 @@ const connectDynamoDB = () => new AWS.DynamoDB(CLIENT_CONFIG);
 const shortUid = () => uuidv4().substring(0, 8);
 
 const headers = {
-  'content-type': 'application/json',
-  'Access-Control-Allow-Headers' : 'Content-Type',
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+    'content-type': 'application/json',
+    'Access-Control-Allow-Headers' : 'Content-Type',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
 };
 
 const handleRequest = async (event) => {

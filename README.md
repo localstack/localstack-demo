@@ -12,7 +12,7 @@ The sample app illustrates a typical Web application scenario with asynchronous 
 
 * LocalStack
 * Docker
-* Node.js / `npm`
+* Node.js / `yarn`
 * `make`
 
 Note: Please make sure to pull and start the `latest` LocalStack Docker image. At the time of writing (2023-02-01), the demo requires some features that were only recently added to LocalStack and are not part of a tagged release version yet.
