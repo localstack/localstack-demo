@@ -17,6 +17,16 @@ The sample app illustrates a typical Web application scenario with asynchronous 
 
 Note: Please make sure to pull and start the `latest` LocalStack Docker image. At the time of writing (2023-02-01), the demo requires some features that were only recently added to LocalStack and are not part of a tagged release version yet.
 
+Note: If you use `npm`, and don't have `yarn`, please install `yarn` by:
+```
+npm install --global yarn
+```
+and add the yarn global packages bin path to your shell profile and restart your shell. For example:
+```
+export PATH="$(yarn global bin):$PATH"
+```
+
+
 ## Running LocalStack
 
 Use the `localstack` CLI command to get started:
