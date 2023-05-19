@@ -7,13 +7,13 @@ usage:           ## Show this help
 
 install:         ## Install dependencies
 	yarn
-	which serverless || yarn global add serverless
+	which serverless || yarn add -D serverless
 	which localstack || pip install localstack
 
 deploy:          ## Deploy the app
 	@make install; \
 		echo "Deploying Serverless app to local environment"; \
-		SLS_DEBUG=1 serverless deploy --stage local
+		SLS_DEBUG=1 ./node_modules/serverless/bin/serverless.js deploy --stage local
 
 send-request:    ## Send a test request to the deployed application
 	@echo Looking up API ID from deployed API Gateway REST APIs ...; \
