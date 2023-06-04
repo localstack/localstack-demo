@@ -17,7 +17,7 @@ deploy:          ## Deploy the app
 
 send-request:    ## Send a test request to the deployed application
 	@echo Looking up API ID from deployed API Gateway REST APIs ...; \
-		apiId=$$(awslocal apigateway get-rest-apis | jq -r '.items[] | select(.name="local-localstack-demo") | .id'); \
+		apiId=$$(awslocal apigateway get-rest-apis --output json | jq -r '.items[] | select(.name="local-localstack-demo") | .id'); \
 		echo Sending request to API Gateway REST APIs ID "$$apiId" ...; \
 		requestID=$$(curl -s -d '{}' http://$$apiId.execute-api.localhost.localstack.cloud:4566/local/requests | jq -r .requestID); \
 		echo "Received request ID '$$requestID'"; \
