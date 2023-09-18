@@ -6,7 +6,7 @@ usage:           ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 install:         ## Install dependencies
-	npm
+	npm install
 	which serverless || npm install -g serverless
 	which localstack || pip install localstack
 
