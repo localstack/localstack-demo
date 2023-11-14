@@ -16,6 +16,7 @@ deploy:          ## Deploy the app
 		SLS_DEBUG=1 serverless deploy --stage local
 
 send-request:    ## Send a test request to the deployed application
+	@which jq || (echo "jq was not found. Please install it (https://jqlang.github.io/jq/download/) and try again." && exit 1)
 	@echo Looking up API ID from deployed API Gateway REST APIs ...; \
 		apiId=$$(awslocal apigateway get-rest-apis --output json | jq -r '.items[] | select(.name="local-localstack-demo") | .id'); \
 		echo Sending request to API Gateway REST APIs ID "$$apiId" ...; \
