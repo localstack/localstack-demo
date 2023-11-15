@@ -1,16 +1,15 @@
 require 'aws-sdk-states'
 
-$localstack_hostname = ENV['LOCALSTACK_HOSTNAME']
-$endpoint = "http://#{$localstack_hostname}:4566"
-if $localstack_hostname
+$aws_endpoint_url = ENV['AWS_ENDPOINT_URL']
+if $aws_endpoint_url
     ENV['AWS_SECRET_ACCESS_KEY'] = 'test'
     ENV['AWS_ACCESS_KEY_ID'] = 'test'
 end
 $state_machine_arn = ENV['STATE_MACHINE_ARN']
 
 def triggerProcessing(event:, context:)
-    if $localstack_hostname
-        client = Aws::States::Client.new(:endpoint => $endpoint)
+    if $aws_endpoint_url
+        client = Aws::States::Client.new(:endpoint => $aws_endpoint_url)
     else
         client = Aws::States::Client.new()
     end

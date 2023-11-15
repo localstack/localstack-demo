@@ -1,16 +1,15 @@
 const uuidv4 = require('uuid/v4');
 const AWS = require('aws-sdk');
 
-const LOCALSTACK_HOSTNAME = process.env.LOCALSTACK_HOSTNAME;
-const ENDPOINT = `http://${LOCALSTACK_HOSTNAME}:4566`;
-if (LOCALSTACK_HOSTNAME) {
+const AWS_ENDPOINT_URL = process.env.AWS_ENDPOINT_URL;
+if (AWS_ENDPOINT_URL) {
     process.env.AWS_SECRET_ACCESS_KEY = 'test';
     process.env.AWS_ACCESS_KEY_ID = 'test';
 }
 
 const DYNAMODB_TABLE = 'appRequests';
 const QUEUE_NAME = 'requestQueue';
-const CLIENT_CONFIG = LOCALSTACK_HOSTNAME ? {endpoint: ENDPOINT} : {};
+const CLIENT_CONFIG = AWS_ENDPOINT_URL ? {endpoint: AWS_ENDPOINT_URL} : {};
 
 const connectSQS = () => new AWS.SQS(CLIENT_CONFIG);
 const connectDynamoDB = () => new AWS.DynamoDB(CLIENT_CONFIG);
