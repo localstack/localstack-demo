@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Deploy app and run test request
           command: |
-            docker logs localstack_main
+            docker logs localstack-main
             awslocal s3 mb s3://test123
             awslocal s3 ls
             make install
@@ -24,7 +24,7 @@ jobs:
             make web &
             make send-request
             code=$?
-            docker logs localstack_main
+            docker logs localstack-main
             exit $code
 
 workflows:
