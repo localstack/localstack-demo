@@ -1,11 +1,11 @@
+import datetime
 import os
 import time
 import uuid
-import datetime
+
 import boto3
 
-LOCALSTACK_HOSTNAME = os.environ.get("LOCALSTACK_HOSTNAME")
-ENDPOINT = f'http://{LOCALSTACK_HOSTNAME}:4566'
+AWS_ENDPOINT_URL = os.environ.get("AWS_ENDPOINT_URL")
 
 DYNAMODB_TABLE = 'appRequests'
 S3_BUCKET = os.environ.get('ARCHIVE_BUCKET') or 'archive-bucket'
@@ -43,7 +43,7 @@ def archive_result(event, context=None):
 
 
 def get_client(resource):
-    kwargs = {"endpoint_url": ENDPOINT} if LOCALSTACK_HOSTNAME else {}
+    kwargs = {"endpoint_url": AWS_ENDPOINT_URL} if AWS_ENDPOINT_URL else {}
     return boto3.client(resource, **kwargs)
 
 
